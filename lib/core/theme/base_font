@@ -1,0 +1,89 @@
+import 'package:flutter/material.dart';
+
+class AppTextStyles {
+
+  static const FontWeight light = FontWeight.w300;
+  static const FontWeight regular = FontWeight.w400;
+  static const FontWeight medium = FontWeight.w500;
+  static const FontWeight semiBold = FontWeight.w600;
+  static const FontWeight bold = FontWeight.w700;
+  static const FontWeight extraBold = FontWeight.w800;
+
+  static const double extraSmall = 12.0;
+  static const double small = 14.0;
+  static const double mediumSize = 16.0;
+  static const double large = 18.0;
+  static const double extraLarge = 22.0;
+  static const double jumbo = 28.0;
+
+  // Text Styles
+  static const TextStyle extraSmallLight = TextStyle(
+    fontSize: extraSmall,
+    fontWeight: light,
+  );
+
+  static const TextStyle extraSmallRegular = TextStyle(
+    fontSize: extraSmall,
+    fontWeight: regular,
+  );
+
+  static const TextStyle extraSmallBold = TextStyle(
+    fontSize: extraSmall,
+    fontWeight: bold,
+  );
+
+  static const TextStyle smallLight = TextStyle(
+    fontSize: small,
+    fontWeight: light,
+  );
+
+  static const TextStyle smallRegular = TextStyle(
+    fontSize: small,
+    fontWeight: regular,
+  );
+
+  static const TextStyle smallBold = TextStyle(
+    fontSize: small,
+    fontWeight: bold,
+  );
+
+  static const TextStyle mediumRegular = TextStyle(
+    fontSize: mediumSize,
+    fontWeight: regular,
+  );
+
+  static const TextStyle mediumBold = TextStyle(
+    fontSize: mediumSize,
+    fontWeight: bold,
+  );
+
+  static const TextStyle largeRegular = TextStyle(
+    fontSize: large,
+    fontWeight: regular,
+  );
+
+  static const TextStyle largeBold = TextStyle(
+    fontSize: large,
+    fontWeight: bold,
+  );
+
+  static const TextStyle extraLargeRegular = TextStyle(
+    fontSize: extraLarge,
+    fontWeight: regular,
+  );
+
+  static const TextStyle extraLargeBold = TextStyle(
+    fontSize: extraLarge,
+    fontWeight: bold,
+  );
+
+  static const TextStyle jumboRegular = TextStyle(
+    fontSize: jumbo,
+    fontWeight: regular,
+  );
+
+  static const TextStyle jumboBold = TextStyle(
+    fontSize: jumbo,
+    fontWeight: bold,
+  );
+}

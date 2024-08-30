@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "92708996157",
+    "project_id": "jazzee-9b074",
+    "storage_bucket": "jazzee-9b074.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92708996157:android:d42d7b4eed1e0ab3c49654",
+        "android_client_info": {
+          "package_name": "com.example.jazzee"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDP1xoyVfV9JJG-3FhW8cGjAgmAEk_M4Lc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,7 +5,7 @@ class SkeletonLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: 100,
       child: ListView.builder(
         itemCount: 1,
         itemBuilder: (context, index) {
@@ -17,7 +17,7 @@ class SkeletonLoader extends StatelessWidget {
                 SkeletonAnimation(
                   child: Container(
                     width: 100,
-                    height: 100,
+                    height: 50,
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(8.0),
@@ -32,7 +32,7 @@ class SkeletonLoader extends StatelessWidget {
                       SkeletonAnimation(
                         child: Container(
                           width: double.infinity,
-                          height: 20.0,
+                          height: 10.0,
                           decoration: BoxDecoration(
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(8.0),
@@ -43,7 +43,7 @@ class SkeletonLoader extends StatelessWidget {
                       SkeletonAnimation(
                         child: Container(
                           width: double.infinity,
-                          height: 20.0,
+                          height: 10.0,
                           decoration: BoxDecoration(
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(8.0),
@@ -54,7 +54,7 @@ class SkeletonLoader extends StatelessWidget {
                       SkeletonAnimation(
                         child: Container(
                           width: 100.0,
-                          height: 20.0,
+                          height: 10.0,
                           decoration: BoxDecoration(
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(8.0),

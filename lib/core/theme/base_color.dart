@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 class AppColors {
-  static const Color primarycolor1 = Color.fromRGBO(44, 85, 45, 1);
+  static const Color primarycolor1 = Color.fromRGBO(214, 242, 49, 1);
   static const Color primarycolor2 = Color.fromRGBO(0, 134, 140, 1);
-  static const Color orangered = Color.fromRGBO(254, 139, 56, 1);
-  static const Color navbarcolor = Color.fromRGBO(232, 241, 252, 1);
+  static const Color green = Color.fromRGBO(74, 187, 0, 1);
+  static const Color black = Color.fromRGBO(22, 22, 22, 1);
   static const Color bluewhite = Color.fromRGBO(251, 251, 254, 1);
   static const Color beige = Color.fromRGBO(255, 244, 238, 1);
   static const Color lightScaffoldBackground = Color(0xffFAFAFA);
@@ -12,23 +12,6 @@ class AppColors {
   static const Color lightBottomNav = Color.fromRGBO(255, 255, 255, 1);
   static const Color darkBottomNav = Color.fromRGBO(23, 23, 23, 1);
   static const Color divider = Color.fromRGBO(0, 0, 0, 0.1);
-
-  //Text
-  static const Color lightAnnouncementText = Color.fromRGBO(79, 79, 79, 1);
-  static const Color bodyText = Color.fromRGBO(79, 79, 79, 1);
-  static const Color titleText = Color(0xff333333);
-  static const Color overlineText = Color.fromRGBO(130, 130, 130, 1);
-  static const Color darkAnnouncementDocBackground =
-      Color.fromRGBO(238, 109, 109, 0.05);
-  static const Color selectedIconColor = Color.fromRGBO(79, 79, 79, 1);
-  static const Color unselectedIconColor = Color.fromRGBO(196, 196, 196, 1);
-  static const Color cardHeader = Color.fromRGBO(79, 79, 79, 1);
-  static const Color cardHeader60 = Color.fromRGBO(79, 79, 79, 0.6);
-  static const Color avenueTitle = Color(0xff141414);
-  static const Color festSubTitiles = Color(0xffC39B5A);
-  static const Color captionRed = Color(0xffFF6961);
-  static const Color teal = Color(0xff5AC8FA);
-  static const Color red = Color(0xffFF453A);
 
   // Buttons
   static const Color buttonBorderColor = Color(0xffE0E0E0);

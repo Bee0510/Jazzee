@@ -1,131 +1,202 @@
-// // ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-// import 'package:flutter/material.dart';
-// import 'package:sobha_mart/api/login.dart';
-// import 'package:sobha_mart/components/basic_text.dart';
-// import 'package:sobha_mart/core/theme/base_color.dart';
-// import 'package:sobha_mart/screens/otp_screen/otp_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:jazzee/backend/auth/login.dart';
+import 'package:jazzee/components/text_field.dart';
+import 'package:jazzee/constants.dart/constants.dart';
+import 'package:jazzee/core/theme/base_color.dart';
+import 'package:jazzee/core/theme/base_font';
+import 'package:jazzee/core/utils/shared_preference.dart';
+import 'package:jazzee/main.dart';
+import 'package:jazzee/navbar.dart';
 
-// class login_screen extends StatefulWidget {
-//   const login_screen({super.key});
+import '../../components/button.dart';
+import '../register_screen/register_screen.dart';
 
-//   @override
-//   State<login_screen> createState() => _login_screenState();
-// }
+class loginScreen extends StatefulWidget {
+  @override
+  State<loginScreen> createState() => _loginScreenState();
+}
 
-// class _login_screenState extends State<login_screen> {
-//   bool isTapped = false;
-//   final TextEditingController _controller = TextEditingController();
-//   final _formKey = GlobalKey<FormState>();
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       resizeToAvoidBottomInset: false,
-//       backgroundColor: Colors.white,
-//       body: Form(
-//         key: _formKey,
-//         child: Center(
-//           child: Padding(
-//             padding: const EdgeInsets.all(16.0),
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: <Widget>[
-//                 SizedBox(height: MediaQuery.of(context).size.height * 0.3),
-//                 Image.asset(
-//                   'assets/sobha logo blue.png',
-//                   fit: BoxFit.cover,
-//                   height: MediaQuery.of(context).size.height * 0.1,
-//                   width: MediaQuery.of(context).size.width * 0.6,
-//                 ),
-//                 SizedBox(height: 30),
-//                 Text(
-//                   'Welcome to Sobhamart',
-//                   style: TextStyle(
-//                     fontSize: 24,
-//                     fontWeight: FontWeight.bold,
-//                     color: Colors.black,
-//                   ),
-//                 ),
-//                 SizedBox(height: 30),
-//                 TextFormField(
-//                   controller: _controller,
-//                   keyboardType: TextInputType.phone,
-//                   validator: (value) {
-//                     if (value == null || value.isEmpty || value.length != 10) {
-//                       return 'Please enter your phone number';
-//                     }
-//                     return null;
-//                   },
-//                   decoration: InputDecoration(
-//                     prefixIcon: Icon(Icons.phone),
-//                     labelText: 'Phone number',
-//                     border: OutlineInputBorder(
-//                       borderRadius: BorderRadius.circular(8),
-//                     ),
-//                   ),
-//                 ),
-//                 SizedBox(height: 30),
-//                 ElevatedButton(
-//                   style: ElevatedButton.styleFrom(
-//                     backgroundColor: AppColors.primarycolor2,
-//                     shape: RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.circular(8),
-//                     ),
-//                   ),
-//                   onPressed: () async {
-//                     if (_formKey.currentState!.validate()) {
-//                       var userDetails =
-//                           await login_api().login_user(phone: _controller.text);
-//                       if (userDetails.messages.status.loginOtp != null) {
-//                         print(userDetails.messages.status.loginOtp);
-//                         Navigator.push(
-//                             context,
-//                             MaterialPageRoute(
-//                                 builder: (context) =>
-//                                     otp_screen(loginDetail: userDetails)));
-//                       } else {
-//                         showDialog(
-//                           context: context,
-//                           builder: (BuildContext context) {
-//                             return AlertDialog(
-//                               title: Text('Login Failed'),
-//                               content: Text(
-//                                   'Failed to login. Please try again later.'),
-//                               actions: <Widget>[
-//                                 TextButton(
-//                                   onPressed: () {
-//                                     Navigator.of(context).pop();
-//                                   },
-//                                   child: Text('OK'),
-//                                 ),
-//                               ],
-//                             );
-//                           },
-//                         );
-//                       }
-//                     }
-//                   },
-//                   child: Container(
-//                     width: double.infinity,
-//                     padding: EdgeInsets.symmetric(vertical: 16),
-//                     alignment: Alignment.center,
-//                     child: Text(
-//                       'Login',
-//                       style: TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 18,
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//                 SizedBox(height: 10),
-//                 Spacer(),
-//                 SizedBox(height: 20),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+class _loginScreenState extends State<loginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  String _roleType = 'students';
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 60),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Log in',
+                    style: AppTextStyles.jumboBold,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Please, log in to your account.\nIt takes less than one minute.',
+                style: AppTextStyles.mediumRegular.copyWith(color: Colors.grey),
+              ),
+              const SizedBox(height: 40),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.08,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black12, width: 1),
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white,
+                ),
+                child: DropdownButtonFormField<String>(
+                  value: _roleType.isNotEmpty
+                      ? _roleType
+                      : null, // Initialize or use null
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _roleType = newValue!;
+                      role_type = newValue;
+                    });
+                  },
+                  items: <String>['students', 'recruiter', 'collage']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          color: AppColors.black,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 20),
+              text_box(
+                value: emailController,
+                title: 'Email',
+                hint: 'Email',
+              ),
+              const SizedBox(height: 20),
+              text_box(
+                value: passwordController,
+                title: 'Password',
+                hint: 'Password',
+                obsureText: true,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {},
+                  child: Text('Forgot password?',
+                      style: AppTextStyles.smallRegular
+                          .copyWith(color: Colors.grey)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: Button(
+                    onPressed: () async {
+                      await Login().signIn(
+                        emailController.text,
+                        passwordController.text,
+                      );
+                      final session = supabase.auth.currentSession;
+                      if (session != null) {
+                        await SharedPreferencesService.setString(
+                            'role', _roleType);
+                        navigatorKey.currentState!.push(
+                          MaterialPageRoute(
+                            builder: (context) => navBar(),
+                          ),
+                        );
+                      }
+                    },
+                    color: AppColors.black,
+                    text: 'Log in',
+                    minimumSize:
+                        Size(MediaQuery.of(context).size.width * 0.7, 80)),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(child: Divider(color: Colors.grey)),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      'or',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                  Expanded(child: Divider(color: Colors.grey)),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Container(
+                height: 40,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Image.asset('assets/image/google_logo.png'),
+                      iconSize: 40,
+                    ),
+                  ],
+                ),
+              ),
+              Spacer(),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    navigatorKey.currentState!.push(
+                      MaterialPageRoute(
+                        builder: (context) => registerScreen(),
+                      ),
+                    );
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Don't have an account? ",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        TextSpan(
+                          text: 'Sign up',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,180 +1,353 @@
-// // ignore_for_file: prefer_const_constructors, deprecated_member_use
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-// import 'package:flutter/material.dart';
-// import 'package:sobha_mart/components/search_bar.dart';
-// import 'package:sobha_mart/components/shopping_cart.dart';
-// import 'package:sobha_mart/core/theme/base_color.dart';
-// import 'package:sobha_mart/models/login_details/user_detail.dart';
-// import 'package:sobha_mart/screens/all_brand_screen/all_brand_screen.dart';
-// import 'package:sobha_mart/screens/explore_screen/explore_screen.dart';
-// import 'package:sobha_mart/screens/home_screen.dart/home_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:jazzee/constants.dart/constants.dart';
+import 'package:jazzee/core/theme/base_color.dart';
+import 'package:jazzee/models/college/college_model.dart';
+import 'package:jazzee/models/student/student_model.dart';
+import 'package:jazzee/provider/user_provider.dart';
+import 'package:jazzee/screens/chat_screen/recruiter/recruiter_chat_screen.dart';
+import 'package:jazzee/screens/create_job_posting_screen/create_job_posting_screen.dart';
+import 'package:jazzee/screens/home_screen.dart/college/collage_home_screen.dart';
+import 'package:jazzee/screens/home_screen.dart/recruiter/company_home_screen.dart';
+import 'package:jazzee/screens/profile_screen/collage/collage_profile_screen.dart';
+import 'package:jazzee/screens/profile_screen/recuiter/recruiter_profile_screen.dart';
+import 'package:provider/provider.dart';
+import 'models/recruiter/recruiter_model.dart';
+import 'screens/chat_screen/chat_screen.dart';
+import 'screens/home_screen.dart/homescreen.dart';
+import 'screens/profile_screen/students/profile_screen.dart';
+import 'screens/saved_screen/saved_screen.dart';
 
-// import 'components/basic_text.dart';
-// import 'components/drawer.dart';
+class navBar extends StatefulWidget {
+  @override
+  State<navBar> createState() => _navBarState();
+}
 
-// class navbar extends StatefulWidget {
-//   const navbar({super.key, this.userDetail});
-//   final user_details? userDetail;
+class _navBarState extends State<navBar> {
+  @override
+  Widget build(BuildContext context) {
+    int _selectedIndex = 0;
+    PageController _pageController = PageController();
 
-//   @override
-//   State<navbar> createState() => _navbarState();
-// }
+    @override
+    void dispose() {
+      _pageController.dispose();
+      super.dispose();
+    }
 
-// class _navbarState extends State<navbar> {
-//   int _selectedIndex = 0;
-//   late PageController _pageController;
+    void _onItemTapped(int index) async {
+      // await supabase.auth.signOut();
+      setState(() {
+        _selectedIndex = index;
+        _pageController.animateToPage(
+          index,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.ease,
+        );
+      });
+    }
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     _pageController = PageController();
-//   }
+    return Scaffold(body: Consumer<UserProvider>(
+      builder: (context, ref, child) {
+        if (ref.isLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-//   @override
-//   void dispose() {
-//     _pageController.dispose();
-//     super.dispose();
-//   }
+        if (ref.error != null) {
+          return Center(
+              child: Column(
+            children: [
+              Text('Error: ${ref.error}'),
+              ElevatedButton(
+                onPressed: () async {
+                  await supabase.auth.signOut();
+                },
+                child: Text('logout'),
+              ),
+            ],
+          ));
+        }
+        if (ref.user == null) {
+          return Center(child: Text('Users not found'));
+        } else {
+          if (ref.user['role'] == 'students') {
+            final Student user = ref.user['user'];
+            return Column(
+              children: [
+                Expanded(
+                  child: PageView(
+                    controller: _pageController,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _selectedIndex = index;
+                      });
+                    },
+                    children: [
+                      Container(child: Center(child: homeScreen(user: user))),
+                      Container(
+                          child: Center(child: savedJobScreen(student: user))),
+                      Container(child: Center(child: ChatScreen())),
+                      Container(
+                          child:
+                              Center(child: studentProfileScreen(user: user))),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          } else if (ref.user['role'] == 'collage') {
+            final Collage user = ref.user['user'];
+            return Column(
+              children: [
+                Expanded(
+                  child: PageView(
+                    controller: _pageController,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _selectedIndex = index;
+                      });
+                    },
+                    children: [
+                      Container(
+                          child: Center(
+                              child: collageHomeScreen(
+                        user: user,
+                      ))),
+                      // Container(child: Center(child: savedSearchScreen())),
+                      Container(child: Center(child: ChatScreen())),
+                      Container(
+                          child: Center(
+                              child: collageProfileScreen(collage: user))),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          } else if (ref.user['role'] == 'recruiter') {
+            final Recruiter user = ref.user['user'];
+            return PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+              children: [
+                Container(
+                    child: Center(
+                        child: companyHomeScreen(
+                  user: user,
+                ))),
+                Container(child: Center(child: createJobPostingScreen())),
+                Container(child: Center(child: companyChatScreen())),
+                Container(
+                    child:
+                        Center(child: companyProfileScreen(recruiter: user))),
+              ],
+            );
+          }
+          final Student user = ref.user['user'];
+          return Column(
+            children: [
+              Text('User: ${user.name}'),
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  },
+                  children: [
+                    Container(child: Center(child: homeScreen())),
+                    Container(
+                        child: Center(child: savedJobScreen(student: user))),
+                    Container(child: Center(child: ChatScreen())),
+                    Container(
+                        child: Center(child: studentProfileScreen(user: user))),
+                  ],
+                ),
+              ),
+            ],
+          );
+        }
+      },
+    ), bottomNavigationBar: Consumer<UserProvider>(
+      builder: (context, ref, child) {
+        if (ref.isLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-//   void _onItemTapped(int index) {
-//     setState(() {
-//       _selectedIndex = index;
-//       _pageController.animateToPage(
-//         index,
-//         duration: Duration(milliseconds: 300),
-//         curve: Curves.ease,
-//       );
-//     });
-//   }
+        if (ref.error != null) {
+          return Center(
+              child: Column(
+            children: [
+              Text('Error: ${ref.error}'),
+              ElevatedButton(
+                onPressed: () async {
+                  await supabase.auth.signOut();
+                },
+                child: Text('logout'),
+              ),
+            ],
+          ));
+        }
+        if (ref.user == null) {
+          return Center(child: Text('Users not found'));
+        } else {
+          if (ref.user['role'] == 'recruiter') {
+            final Recruiter user = ref.user['user'];
+            return Container(
+              decoration: BoxDecoration(
+                color: AppColors.black,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: Offset(0, -2),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed,
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  selectedItemColor: AppColors.primarycolor2,
+                  unselectedItemColor: Colors.white,
+                  showSelectedLabels: false,
+                  showUnselectedLabels: false,
+                  currentIndex: _selectedIndex,
+                  onTap: _onItemTapped,
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home),
+                      label: 'Home',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.add),
+                      label: 'Add',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.message_outlined),
+                      label: 'Messages',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.person_outline),
+                      label: 'Profile',
+                    ),
+                  ],
+                ),
+              ),
+            );
+          } else if (ref.user['role'] == 'collage') {
+            final Collage user = ref.user['user'];
+            return Container(
+              decoration: BoxDecoration(
+                color: AppColors.black,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: Offset(0, -2),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed,
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  selectedItemColor: AppColors.primarycolor2,
+                  unselectedItemColor: Colors.white,
+                  showSelectedLabels: false,
+                  showUnselectedLabels: false,
+                  currentIndex: _selectedIndex,
+                  onTap: _onItemTapped,
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home),
+                      label: 'Home',
+                    ),
+                    // BottomNavigationBarItem(
+                    //   icon: Icon(Icons.add),
+                    //   label: 'Add',
+                    // ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.message_outlined),
+                      label: 'Messages',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.person_outline),
+                      label: 'Profile',
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
 
-//   Future<bool> _showExitConfirmationDialog(BuildContext context) async {
-//     return await showDialog(
-//           context: context,
-//           builder: (context) => AlertDialog(
-//             title: Text('Exit App'),
-//             content: Text('Do you want to exit the app?'),
-//             actions: [
-//               TextButton(
-//                 onPressed: () => Navigator.of(context).pop(false),
-//                 child: Text('Cancel'),
-//               ),
-//               TextButton(
-//                 onPressed: () => Navigator.of(context).pop(true),
-//                 child: Text('Exit'),
-//               ),
-//             ],
-//           ),
-//         ) ??
-//         false; // If the dialog is dismissed without any action
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return WillPopScope(
-//       onWillPop: () async {
-//         bool shouldExit = await _showExitConfirmationDialog(context);
-//         return shouldExit;
-//       },
-//       child: Scaffold(
-//         appBar: AppBar(
-//           elevation: 0,
-//           toolbarHeight: kToolbarHeight,
-//           leading: Builder(
-//             builder: (context) {
-//               return IconButton(
-//                 icon: const Icon(Icons.menu, size: 30, color: Colors.white),
-//                 onPressed: () {
-//                   Scaffold.of(context).openDrawer();
-//                 },
-//               );
-//             },
-//           ),
-//           // title: basic_text(
-//           //   title: 'Shobhamart',
-//           //   style: TextStyle(
-//           //       color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-//           // ),
-//           title: Image.asset(
-//             'assets/sobha logo.png',
-//             height: 40,
-//           ),
-//           actions: [
-//             // IconButton(
-//             //     onPressed: () {},
-//             //     icon: Icon(
-//             //       Icons.notifications_none_outlined,
-//             //       size: 28,
-//             //       color: Colors.white,
-//             //     )),
-//             shopping_cart(
-//               user: widget.userDetail!,
-//             ),
-//           ],
-//           backgroundColor: AppColors.primarycolor2,
-//         ),
-//         drawer: drawer(
-//           userDetail: widget.userDetail!,
-//         ),
-//         body: Column(
-//           children: [
-//             search_bar(
-//               search: false,
-//               userDetails: widget.userDetail!,
-//             ),
-//             Expanded(
-//               child: PageView(
-//                 controller: _pageController,
-//                 onPageChanged: (index) {
-//                   setState(() {
-//                     _selectedIndex = index;
-//                   });
-//                 },
-//                 children: [
-//                   Container(
-//                       child: Center(
-//                           child: home_screen(
-//                     userDetail: widget.userDetail,
-//                   ))),
-//                   Container(
-//                       child: Center(
-//                           child: explore_screen(
-//                     userDetail: widget.userDetail!,
-//                   ))),
-//                   Container(
-//                       child: Center(
-//                           child: all_brand_screen(
-//                     userDetail: widget.userDetail,
-//                   ))),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//         bottomNavigationBar: BottomNavigationBar(
-//           iconSize: 28,
-//           selectedLabelStyle:
-//               TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-//           unselectedLabelStyle:
-//               TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-//           selectedItemColor: AppColors.primarycolor2,
-//           items: const <BottomNavigationBarItem>[
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.home),
-//               label: 'Home',
-//             ),
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.explore),
-//               label: 'Explore',
-//             ),
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.all_inbox),
-//               label: 'All Brand',
-//             ),
-//           ],
-//           currentIndex: _selectedIndex,
-//           onTap: _onItemTapped,
-//         ),
-//       ),
-//     );
-//   }
-// }
+          return Container(
+            decoration: BoxDecoration(
+              color: AppColors.black,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: Offset(0, -2),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                selectedItemColor: AppColors.primarycolor2,
+                unselectedItemColor: Colors.white,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                currentIndex: _selectedIndex,
+                onTap: _onItemTapped,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home_outlined),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.feed_outlined),
+                    label: 'Posts',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.message_outlined),
+                    label: 'Messages',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.person_outline),
+                    label: 'Profile',
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+      },
+    ));
+  }
+}

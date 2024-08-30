@@ -3,7 +3,11 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  agora_rtc_engine
   app_links
+  firebase_core
+  iris_method_channel
+  permission_handler_windows
   url_launcher_windows
 )
 

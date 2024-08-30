@@ -1,55 +1,50 @@
-// // ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, unused_element, camel_case_types, unused_import
 
-// import 'package:flutter/material.dart';
-// import '../models/login_details/user_detail.dart';
-// import 'login_screen.dart/login_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:jazzee/main.dart';
+import 'package:jazzee/navbar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-// class wrapper extends StatefulWidget {
-//   const wrapper({super.key});
+import '../../../constants.dart/constants.dart';
+import 'login_screen.dart/login_screen.dart';
 
-//   @override
-//   State<wrapper> createState() => _wrapperState();
-// }
+class wrapper extends StatefulWidget {
+  const wrapper({super.key});
 
-// class _wrapperState extends State<wrapper> {
-//   Future<user_details?> fetchUserDetails() async {
-//     // final number = SharedPreferencesService.getString("user_id");
-//     // if (number != null) {
-//     //   final userDetails = await userDetailsStream(number).first;
-//     //   return userDetails;
-//     // }
-//     // return null;
-//   }
+  @override
+  State<wrapper> createState() => _wrapperState();
+}
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return FutureBuilder<user_details?>(
-//       future: fetchUserDetails(),
-//       builder: (context, snapshot) {
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           return Scaffold(
-//             body: Center(child: CircularProgressIndicator()),
-//           );
-//         } else if (snapshot.hasData) {
-//           final user = snapshot.data!;
-//           if (user.messages.status.isLoggedIn) {
-//             if (user.messages.status.status == '0' &&
-//                 user.messages.status.fullname == '') {
-//               return profile_screen(
-//                 user_detail: user,
-//               );
-//             } else {
-//               return navbar(
-//                 userDetail: user,
-//               );
-//             }
-//           } else {
-//             return login_screen();
-//           }
-//         } else {
-//           return login_screen();
-//         }
-//       },
-//     );
-//   }
-// }
+class _wrapperState extends State<wrapper> {
+  Future<void> _authDecider() async {
+    await Future.delayed(Duration.zero);
+
+    final session = supabase.auth.currentSession;
+    final user = supabase.auth.currentUser;
+    print('session is $session');
+    print('user is $user');
+    if (session == null) {
+      navigatorKey.currentState!.pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => loginScreen()),
+          (route) => false);
+    } else {
+      navigatorKey.currentState!.pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => navBar()), (route) => false);
+    }
+  }
+
+  @override
+  void initState() {
+    _authDecider();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
