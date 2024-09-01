@@ -13,7 +13,6 @@ class InterviewCard extends StatelessWidget {
     required this.interviewerName,
     required this.interviewDateTime,
   });
-
   bool _canJoinInterview(DateTime currentDateTime) {
     final DateTime fiveMinutesBefore =
         interviewDateTime.subtract(Duration(minutes: 5));
@@ -25,7 +24,6 @@ class InterviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(10),
       elevation: 5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),

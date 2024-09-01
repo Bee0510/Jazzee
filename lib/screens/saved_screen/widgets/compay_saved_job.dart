@@ -4,8 +4,6 @@ import 'package:jazzee/core/theme/base_color.dart';
 import 'package:jazzee/main.dart';
 import 'package:jazzee/models/recruiter/jobs_posting_model.dart';
 import 'package:jazzee/screens/job_applicants_screen.dart/job_applicants_screen.dart';
-import 'package:jazzee/screens/profile_screen/collage/widgets/college_students_screen.dart';
-
 import '../../../backend/getdata/get_applicants.dart';
 import '../../../models/student/student_model.dart';
 
@@ -85,7 +83,6 @@ class _CompanysavedJobCardState extends State<CompanysavedJobCard> {
                   ],
                 ),
                 SizedBox(height: 8),
-                // Posted Time
                 Text(
                   widget.job.applyTill!,
                   style: TextStyle(color: Colors.grey),

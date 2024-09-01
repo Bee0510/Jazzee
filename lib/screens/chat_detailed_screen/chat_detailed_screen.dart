@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,8 +10,8 @@ import 'package:jazzee/main.dart';
 import 'package:jazzee/models/chats/chat_model.dart';
 import 'package:jazzee/models/chats/message_model.dart';
 import 'package:jazzee/models/recruiter/recruiter_model.dart';
+import 'package:jazzee/notification/send_notification.dart';
 import 'package:jazzee/screens/videocall_screen/video_call_screen.dart';
-
 import 'widgets/interview_card.dart';
 
 class chatDetailScreen extends StatefulWidget {
@@ -55,7 +56,15 @@ class _chatDetailScreenState extends State<chatDetailScreen> {
         title: Row(
           children: [
             CircleAvatar(
-              backgroundImage: AssetImage('assets/image/google_logo.png'),
+              backgroundColor: Color(Random().nextInt(0xffffffff)),
+              child: Text(
+                widget.recruiter.companyName[0],
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             SizedBox(width: 10),
             Column(
@@ -74,17 +83,17 @@ class _chatDetailScreenState extends State<chatDetailScreen> {
           ],
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.call_outlined, color: Colors.white),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.videocam_outlined, color: Colors.white),
-            onPressed: () {
-              navigatorKey.currentState!.push(
-                  MaterialPageRoute(builder: (context) => videoCallScreen()));
-            },
-          ),
+          // IconButton(
+          //   icon: Icon(Icons.call_outlined, color: Colors.white),
+          //   onPressed: () {},
+          // ),
+          // IconButton(
+          //   icon: Icon(Icons.videocam_outlined, color: Colors.white),
+          //   onPressed: () {
+          //     navigatorKey.currentState!.push(
+          //         MaterialPageRoute(builder: (context) => videoCallScreen()));
+          //   },
+          // ),
         ],
       ),
       body: StreamBuilder<List<Message>>(
@@ -105,146 +114,166 @@ class _chatDetailScreenState extends State<chatDetailScreen> {
                   element.receiverId == widget.recruiter.companyId)
               .toList();
 
-          return Column(
+          return Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width - 50,
-                  height: MediaQuery.of(context).size.height * 0.2,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      padding: EdgeInsets.all(12),
-                      margin: EdgeInsets.symmetric(vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.lightBlueAccent.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            widget.chat.firstMessage,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  itemCount: messages.length,
-                  itemBuilder: (context, index) {
-                    return messages[index].senderType == 'interview'
-                        ? Align(
-                            alignment: messages[index].senderId ==
-                                    messages[0].collage_id
-                                ? Alignment.centerRight
-                                : Alignment.centerLeft,
-                            child: InterviewCard(
-                                interviewerName: widget.recruiter.companyName,
-                                interviewDateTime: extractDateTime(
-                                    messages[index].messageText)),
-                          )
-                        : Align(
-                            alignment: messages[index].senderId ==
-                                    messages[index].student_id
-                                ? Alignment.centerRight
-                                : Alignment.centerLeft,
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width - 80,
+                          height: MediaQuery.of(context).size.height * 0.2,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
                             child: Container(
                               padding: EdgeInsets.all(12),
                               margin: EdgeInsets.symmetric(vertical: 8),
                               decoration: BoxDecoration(
-                                color: messages[index].senderId !=
-                                        messages[index].student_id
-                                    ? Colors.lightBlueAccent.withOpacity(0.2)
-                                    : AppColors.beige,
+                                color: Colors.lightBlueAccent.withOpacity(0.2),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    messages[index].messageText,
+                                    widget.chat.firstMessage,
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  // SizedBox(height: 4),
-                                  // Text(
-                                  //   messages[index].timestamp.toString(),
-                                  //   style: TextStyle(
-                                  //     color: Colors.grey,
-                                  //     fontSize: 10,
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                             ),
-                          );
-                  },
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.add_circle,
-                          color: AppColors.black, size: 28),
-                      onPressed: () {},
-                    ),
-                    Expanded(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(24.0),
-                        ),
-                        child: TextField(
-                          controller: _messageController,
-                          decoration: InputDecoration(
-                            hintText: 'Type a message',
-                            border: InputBorder.none,
                           ),
                         ),
                       ),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.send, color: AppColors.black),
-                      onPressed: () async {
-                        print(widget.chat.chatId);
-                        print(widget.chat.companyId);
-                        print(widget.chat.studentId);
-                        await SendMessage()
-                            .sendMessage(
-                                widget.chat.chatId,
-                                widget.chat.companyId!,
-                                widget.chat.studentId!,
-                                _messageController.text,
-                                widget.chat.companyId!,
-                                widget.chat.studentId!)
-                            .then((value) async {
-                          await supabase.from('chats').update({
-                            'last_message': _messageController.text,
-                            'last_time': DateTime.now().toIso8601String(),
-                          }).eq('id', widget.chat.chatId);
-                          _messageController.clear();
-                        });
+                    ListView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        return messages[index].senderType == 'interview'
+                            ? Align(
+                                alignment: messages[index].senderId ==
+                                        messages[0].collage_id
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                                child: InterviewCard(
+                                    interviewerName:
+                                        widget.recruiter.companyName,
+                                    interviewDateTime: extractDateTime(
+                                        messages[index].messageText)),
+                              )
+                            : Align(
+                                alignment: messages[index].senderId ==
+                                        messages[index].student_id
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                                child: Container(
+                                  padding: EdgeInsets.all(12),
+                                  margin: EdgeInsets.symmetric(vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: messages[index].senderId !=
+                                            messages[index].student_id
+                                        ? Colors.lightBlueAccent
+                                            .withOpacity(0.2)
+                                        : AppColors.beige,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        messages[index].messageText,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text(
+                                        DateFormat('MMMd')
+                                            .format(messages[index].timestamp),
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
                       },
                     ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                   ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 12.0),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.add_circle,
+                              color: AppColors.black, size: 28),
+                          onPressed: () {},
+                        ),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(24.0),
+                            ),
+                            child: TextField(
+                              controller: _messageController,
+                              decoration: InputDecoration(
+                                hintText: 'Type a message',
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.send, color: AppColors.black),
+                          onPressed: () async {
+                            await sendPushMessage(
+                                widget.recruiter.token,
+                                widget.recruiter.companyName,
+                                _messageController.text);
+                            await SendMessage()
+                                .sendMessage(
+                                    widget.chat.chatId,
+                                    widget.chat.companyId!,
+                                    widget.chat.studentId!,
+                                    _messageController.text,
+                                    widget.chat.companyId!,
+                                    widget.chat.studentId!)
+                                .then((value) async {
+                              await supabase.from('chats').update({
+                                'last_message': _messageController.text,
+                                'last_time': DateTime.now().toIso8601String(),
+                              }).eq('id', widget.chat.chatId);
+                              _messageController.clear();
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],

@@ -1,4 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings, prefer_const_literals_to_create_immutables
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:jazzee/backend/getdata/get_personal_info.dart';
 import 'package:jazzee/models/location_model.dart';
@@ -82,8 +84,12 @@ class _companyProfileScreenState extends State<companyProfileScreen> {
                       Center(
                         child: CircleAvatar(
                           radius: 50,
-                          backgroundImage:
-                              AssetImage('assets/image/google_logo.png'),
+                          backgroundColor: Color(Random().nextInt(0xffffffff)),
+                          child: Text(
+                            company.companyName[0].toUpperCase(),
+                            style: TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                       SizedBox(height: 16),
@@ -91,10 +97,6 @@ class _companyProfileScreenState extends State<companyProfileScreen> {
                         company.companyName,
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "College ID: ${company.companyId}",
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                       SizedBox(height: 16),
                       Row(

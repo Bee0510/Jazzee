@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:jazzee/backend/getdata/get_personal_info.dart';
 import 'package:jazzee/models/college/college_model.dart';
@@ -84,7 +86,7 @@ class _collageProfileScreenState extends State<collageProfileScreen> {
               List<Student> students = snapshot.data[1];
               Locations location = snapshot.data[2];
               final studentsPlaced = students
-                  .where((element) => element.placedOnCampus)
+                  .where((element) => element.placedOnCampus == true)
                   .toList()
                   .length;
               return Padding(
@@ -96,8 +98,14 @@ class _collageProfileScreenState extends State<collageProfileScreen> {
                       Center(
                         child: CircleAvatar(
                           radius: 50,
-                          backgroundImage:
-                              AssetImage('assets/image/google_logo.png'),
+                          backgroundColor: Color(Random().nextInt(0xffffffff)),
+                          child: Text(
+                            college.collageName[0],
+                            style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
                         ),
                       ),
                       SizedBox(height: 16),

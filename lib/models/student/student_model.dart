@@ -12,7 +12,7 @@ class Student {
   final String? dateOfBirth;
   final Collage? collage;
   final String roleType;
-  final bool placedOnCampus;
+  final String placedOnCampus;
   final String roll_no;
   final String? resumeLink;
   final String token;
@@ -48,7 +48,7 @@ class Student {
       collage: collage,
       collageName: json['collage_name'] ?? '',
       roleType: json['role_type'],
-      placedOnCampus: json['placed_oncampus'] ?? false,
+      placedOnCampus: json['placed_oncampus'] ?? '',
       resumeLink: json['resume_url'] ?? '',
       roll_no: json['roll_no'] ?? '',
       token: json['token'] ?? '',

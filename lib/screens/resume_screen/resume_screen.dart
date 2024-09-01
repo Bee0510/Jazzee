@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:jazzee/backend/getdata/get_personal_info.dart';
 import 'package:jazzee/components/button.dart';
 import 'package:jazzee/models/student/student_model.dart';
@@ -53,8 +54,38 @@ class _ResumeUploaderState extends State<ResumeUploader> {
   }
 
   Future<void> _refresh() async {
-    _downloadPDF();
+    _downloadPdf();
     student = GetPersonalInfo().GetUserStudent(widget.studentId);
+  }
+
+  String? localFilePath;
+
+  Future<void> _downloadPdf() async {
+    try {
+      final responses = await Supabase.instance.client
+          .from('students')
+          .select('resume_url')
+          .eq('student_id', widget.studentId)
+          .single();
+
+      if (responses != null) {
+        final String url = responses['resume_url'] as String;
+        print('url:$url');
+
+        final response = await http.get(Uri.parse(url));
+        final bytes = response.bodyBytes;
+
+        final dir = await getApplicationDocumentsDirectory();
+        final file = File('${dir.path}/temp.pdf');
+
+        await file.writeAsBytes(bytes, flush: true);
+        setState(() {
+          localFilePath = file.path;
+        });
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
   }
 
   bool _isLoading = true;
@@ -76,6 +107,7 @@ class _ResumeUploaderState extends State<ResumeUploader> {
         final file = File('${dir.path}/temp.pdf');
         await file.writeAsBytes(fileResponse.bodyBytes);
         setState(() {
+          print('File path: ${file.path}');
           _pdfPath = file.path;
           _isLoading = false;
         });
@@ -90,6 +122,7 @@ class _ResumeUploaderState extends State<ResumeUploader> {
   initState() {
     super.initState();
     _refresh();
+    _downloadPdf();
   }
 
   @override
@@ -128,22 +161,19 @@ class _ResumeUploaderState extends State<ResumeUploader> {
               return Center(child: Text('No data found'));
             } else {
               return Center(
-                child: Column(
+                child: Stack(
                   children: [
-                    _pdfPath != null
+                    localFilePath != null
                         ? Container(
-                            height: MediaQuery.of(context).size.height -
-                                80 -
-                                kBottomNavigationBarHeight,
                             child: PDFView(
-                              filePath: _pdfPath,
-                            ))
-                        : Text('No resume uploaded.'),
-                    // SizedBox(height: 20),
-                    // ElevatedButton(
-                    //   onPressed: _uploadResume,
-                    //   child: Text('Upload Resume'),
-                    // ),
+                            filePath: localFilePath!,
+                          ))
+                        : Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primarycolor2,
+                            ),
+                          ),
+                    SizedBox(height: 20),
                   ],
                 ),
               );
@@ -152,7 +182,7 @@ class _ResumeUploaderState extends State<ResumeUploader> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Button(
             onPressed: () {
               _uploadResume();

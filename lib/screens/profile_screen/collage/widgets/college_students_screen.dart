@@ -275,8 +275,8 @@ class _collageStudentProfileScreenState
                       children: [
                         Icon(Icons.location_on),
                         SizedBox(width: 8),
-                        Text(student.placedOnCampus
-                            ? 'Placed'
+                        Text(student.placedOnCampus.isEmpty
+                            ? student.placedOnCampus
                             : 'Unplaced Till Date'),
                       ],
                     ),

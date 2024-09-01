@@ -1,14 +1,20 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
+import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:jazzee/backend/getdata/get_job_postings.dart';
 import 'package:jazzee/constants.dart/constants.dart';
 import 'package:jazzee/core/theme/base_color.dart';
+import 'package:jazzee/main.dart';
 import 'package:jazzee/models/student/job_applied_model.dart';
+import 'package:jazzee/notification/send_notification.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../../../backend/getdata/get_personal_info.dart';
 import '../../../../components/basic_text.dart';
 import '../../../../models/student/student_model.dart';
-import '../../backend/jobdata/send_message.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class jobApplicantsScreen extends StatefulWidget {
   const jobApplicantsScreen(
@@ -178,8 +184,27 @@ class _jobApplicantsScreenState extends State<jobApplicantsScreen> {
                                                               .studentId)
                                                       .eq('job_id',
                                                           widget.jobId)
-                                                      .then((value) =>
-                                                          _refresh());
+                                                      .then((value) async {
+                                                        _refresh();
+                                                        await supabase
+                                                            .from('students')
+                                                            .update({
+                                                          'placed_oncampus':
+                                                              jobApplied
+                                                                  .companyName
+                                                        }).eq(
+                                                                'student_id',
+                                                                filteredStudents[
+                                                                        index]
+                                                                    .studentId);
+                                                        await sendPushMessage(
+                                                            widget
+                                                                .students[index]
+                                                                .token,
+                                                            jobApplied
+                                                                .companyName,
+                                                            'Dear ${filteredStudents[index].name},\nCongratulations! You have been selected for the the Job Role.');
+                                                      });
                                                 },
                                                 child: Text('Select',
                                                     style: TextStyle(
@@ -218,6 +243,12 @@ class _jobApplicantsScreenState extends State<jobApplicantsScreen> {
                                                 children: [
                                                   InkWell(
                                                     onTap: () async {
+                                                      await sendPushMessage(
+                                                          widget.students[index]
+                                                              .token,
+                                                          jobApplied
+                                                              .companyName,
+                                                          'Dear ${filteredStudents[index].name},\nCongratulations! You have been selected for the interview. Please let us know your availability for the interview.');
                                                       await supabase
                                                           .from('job_apply')
                                                           .update({
@@ -283,6 +314,13 @@ class _jobApplicantsScreenState extends State<jobApplicantsScreen> {
                                                           widget.jobId)
                                                       .then((value) async {
                                                         _refresh();
+                                                        await sendPushMessage(
+                                                            widget
+                                                                .students[index]
+                                                                .token,
+                                                            jobApplied
+                                                                .companyName,
+                                                            'Dear ${filteredStudents[index].name},\nYour application has been accepted. Please keep an eye on your email for further instructions.');
                                                         await supabase
                                                             .from('chats')
                                                             .insert({
@@ -409,6 +447,7 @@ class _collageStudentProfileScreenState
             return Center(child: Text('No data found'));
           } else {
             Student student = snapshot.data;
+            print(student.resumeLink);
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
@@ -418,8 +457,11 @@ class _collageStudentProfileScreenState
                     Center(
                       child: CircleAvatar(
                         radius: 50,
-                        backgroundImage:
-                            AssetImage('assets/image/google_logo.png'),
+                        backgroundColor: Color(Random().nextInt(0xffffffff)),
+                        child: Text(
+                          student.name[0].toUpperCase(),
+                          style: TextStyle(fontSize: 24, color: Colors.white),
+                        ),
                       ),
                     ),
                     SizedBox(height: 16),
@@ -454,29 +496,13 @@ class _collageStudentProfileScreenState
                       ],
                     ),
                     SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Icon(Icons.web),
-                        SizedBox(width: 8),
-                        InkWell(
-                          onTap: () {},
-                          child: Text(
-                            student.verified ? 'Verified' : 'Not Verified',
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Icon(Icons.location_on),
-                        SizedBox(width: 8),
-                        Text(student.placedOnCampus
-                            ? 'Placed'
-                            : 'Unplaced Till Date'),
-                      ],
-                    ),
+                    TextButton(
+                        onPressed: () {
+                          navigatorKey.currentState!.push(MaterialPageRoute(
+                              builder: (context) =>
+                                  PdfViewerPage(pdfUrl: student.resumeLink!)));
+                        },
+                        child: Text('View Resume/Portfolio')),
                   ],
                 ),
               ),
@@ -484,6 +510,72 @@ class _collageStudentProfileScreenState
           }
         },
       ),
+    );
+  }
+}
+
+class PdfViewerPage extends StatefulWidget {
+  final String pdfUrl;
+
+  PdfViewerPage({required this.pdfUrl});
+
+  @override
+  _PdfViewerPageState createState() => _PdfViewerPageState();
+}
+
+class _PdfViewerPageState extends State<PdfViewerPage> {
+  String? localFilePath;
+
+  @override
+  void initState() {
+    super.initState();
+    _downloadPdf();
+  }
+
+  Future<void> _downloadPdf() async {
+    try {
+      final response = await http.get(Uri.parse(widget.pdfUrl));
+      final bytes = response.bodyBytes;
+
+      final dir = await getApplicationDocumentsDirectory();
+      final file = File('${dir.path}/temp.pdf');
+
+      await file.writeAsBytes(bytes, flush: true);
+      setState(() {
+        localFilePath = file.path;
+      });
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.black,
+        title: basic_text(
+            title: 'Resume',
+            style: Theme.of(context).textTheme.headline6!.copyWith(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w500)),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            navigatorKey.currentState!.pop();
+          },
+        ),
+        centerTitle: true,
+      ),
+      body: localFilePath != null
+          ? PDFView(
+              filePath: localFilePath!,
+            )
+          : Center(child: CircularProgressIndicator()),
     );
   }
 }

@@ -28,7 +28,7 @@ class GetPersonalInfo {
           dateOfBirth: '',
           collage: null,
           roleType: '',
-          placedOnCampus: false,
+          placedOnCampus: '',
           roll_no: '',
           token: '');
     }

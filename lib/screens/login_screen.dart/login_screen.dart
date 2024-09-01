@@ -10,6 +10,7 @@ import 'package:jazzee/core/theme/base_font';
 import 'package:jazzee/core/utils/shared_preference.dart';
 import 'package:jazzee/main.dart';
 import 'package:jazzee/navbar.dart';
+import 'package:jazzee/notification/send_notification.dart';
 
 import '../../components/button.dart';
 import '../register_screen/register_screen.dart';
@@ -123,6 +124,22 @@ class _loginScreenState extends State<loginScreen> {
                       if (session != null) {
                         await SharedPreferencesService.setString(
                             'role', _roleType);
+                        if (_roleType == 'students') {
+                          await supabase.from('students').update({
+                            'token':
+                                SharedPreferencesService.getString('token'),
+                          }).eq('student_id', supabase.auth.currentUser!.id);
+                        } else if (_roleType == 'recruiter') {
+                          await supabase.from('recruiter').update({
+                            'token':
+                                SharedPreferencesService.getString('token'),
+                          }).eq('company_id', supabase.auth.currentUser!.id);
+                        } else {
+                          await supabase.from('collage').update({
+                            'token':
+                                SharedPreferencesService.getString('token'),
+                          }).eq('collage_id', supabase.auth.currentUser!.id);
+                        }
                         navigatorKey.currentState!.push(
                           MaterialPageRoute(
                             builder: (context) => navBar(),
@@ -133,36 +150,36 @@ class _loginScreenState extends State<loginScreen> {
                     color: AppColors.black,
                     text: 'Log in',
                     minimumSize:
-                        Size(MediaQuery.of(context).size.width * 0.7, 80)),
+                        Size(MediaQuery.of(context).size.width * 0.7, 50)),
               ),
               const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(child: Divider(color: Colors.grey)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text(
-                      'or',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                  Expanded(child: Divider(color: Colors.grey)),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Container(
-                height: 40,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Image.asset('assets/image/google_logo.png'),
-                      iconSize: 40,
-                    ),
-                  ],
-                ),
-              ),
+              // Row(
+              //   children: [
+              //     Expanded(child: Divider(color: Colors.grey)),
+              //     Padding(
+              //       padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              //       child: Text(
+              //         'or',
+              //         style: TextStyle(color: Colors.grey),
+              //       ),
+              //     ),
+              //     Expanded(child: Divider(color: Colors.grey)),
+              //   ],
+              // ),
+              // const SizedBox(height: 20),
+              // Container(
+              //   height: 40,
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       IconButton(
+              //         onPressed: () {},
+              //         icon: Image.asset('assets/image/google_logo.png'),
+              //         iconSize: 40,
+              //       ),
+              //     ],
+              //   ),
+              // ),
               Spacer(),
               Center(
                 child: TextButton(

@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:jazzee/constants.dart/constants.dart';
 import 'package:jazzee/main.dart';
@@ -8,7 +10,10 @@ import 'package:jazzee/models/recruiter/recruiter_model.dart';
 import 'package:jazzee/models/student/student_model.dart';
 import 'package:jazzee/screens/chat_detailed_screen/recruiter/recruiter_chat_detailed_screen.dart';
 import '../../../../core/theme/base_color.dart';
+import '../../../components/text_field.dart';
 import '../../chat_detailed_screen/chat_detailed_screen.dart';
+import '../../videocall_screen/video_call_screen.dart';
+import '../../videocall_screen/workshop.dart';
 
 class companyChatScreen extends StatefulWidget {
   @override
@@ -21,8 +26,7 @@ class _companyChatScreenState extends State<companyChatScreen> {
     {
       'name': 'Rozanne Barrientes',
       'message': 'A wonderful serenity has taken...',
-      'avatar':
-          'assets/image/google_logo.png', // Replace with actual avatar image paths
+      'avatar': 'assets/image/google_logo.png',
       'unread': false,
     },
     {
@@ -92,6 +96,7 @@ class _companyChatScreenState extends State<companyChatScreen> {
     );
   }
 
+  final TextEditingController _channel = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,6 +175,36 @@ class _companyChatScreenState extends State<companyChatScreen> {
                       ),
                     ),
                   )),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: text_box(
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          value: _channel,
+                          title: '',
+                          hint: 'Channel Name/ID',
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.black),
+                        onPressed: () {
+                          navigatorKey.currentState!.push(MaterialPageRoute(
+                              builder: (context) => workShop()));
+                        },
+                        child:
+                            Text('Join', style: TextStyle(color: Colors.white)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
@@ -259,13 +294,9 @@ class _companyChatScreenState extends State<companyChatScreen> {
                               },
                               child: ListTile(
                                 leading: CircleAvatar(
-                                  backgroundImage: chatList[index]['avatar'] !=
-                                          ''
-                                      ? AssetImage(chatList[index]['avatar'])
-                                      : null,
-                                  child: chatList[index]['avatar'] == ''
-                                      ? Text(student.name)
-                                      : null,
+                                  backgroundColor:
+                                      Color(Random().nextInt(0xffffffff)),
+                                  child: Text(student.name[0]),
                                 ),
                                 title: Text(
                                   student.name,

@@ -1,5 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers
 import 'package:flutter/material.dart';
 import 'package:jazzee/constants.dart/constants.dart';
 import 'package:jazzee/core/theme/base_color.dart';
@@ -8,8 +7,7 @@ import 'package:jazzee/models/student/student_model.dart';
 import 'package:jazzee/provider/user_provider.dart';
 import 'package:jazzee/screens/chat_screen/recruiter/recruiter_chat_screen.dart';
 import 'package:jazzee/screens/create_job_posting_screen/create_job_posting_screen.dart';
-import 'package:jazzee/screens/home_screen.dart/college/collage_home_screen.dart';
-import 'package:jazzee/screens/home_screen.dart/recruiter/company_home_screen.dart';
+import 'package:jazzee/screens/post_screen/post_screen.dart';
 import 'package:jazzee/screens/profile_screen/collage/collage_profile_screen.dart';
 import 'package:jazzee/screens/profile_screen/recuiter/recruiter_profile_screen.dart';
 import 'package:provider/provider.dart';
@@ -25,11 +23,10 @@ class navBar extends StatefulWidget {
 }
 
 class _navBarState extends State<navBar> {
+  int _selectedIndex = 0;
+  PageController _pageController = PageController();
   @override
   Widget build(BuildContext context) {
-    int _selectedIndex = 0;
-    PageController _pageController = PageController();
-
     @override
     void dispose() {
       _pageController.dispose();
@@ -37,7 +34,6 @@ class _navBarState extends State<navBar> {
     }
 
     void _onItemTapped(int index) async {
-      // await supabase.auth.signOut();
       setState(() {
         _selectedIndex = index;
         _pageController.animateToPage(
@@ -86,7 +82,11 @@ class _navBarState extends State<navBar> {
                     children: [
                       Container(child: Center(child: homeScreen(user: user))),
                       Container(
-                          child: Center(child: savedJobScreen(student: user))),
+                          child: Center(
+                              child: postScreen(
+                        name: user.name,
+                        college: user.collageName,
+                      ))),
                       Container(child: Center(child: ChatScreen())),
                       Container(
                           child:
@@ -111,10 +111,10 @@ class _navBarState extends State<navBar> {
                     children: [
                       Container(
                           child: Center(
-                              child: collageHomeScreen(
-                        user: user,
-                      ))),
-                      // Container(child: Center(child: savedSearchScreen())),
+                              child: postScreen(name: user.collageName))),
+                      // Container(
+                      //     child: Center(
+                      //         child: postScreen(name: user.collageName))),
                       Container(child: Center(child: ChatScreen())),
                       Container(
                           child: Center(
@@ -135,10 +135,7 @@ class _navBarState extends State<navBar> {
               },
               children: [
                 Container(
-                    child: Center(
-                        child: companyHomeScreen(
-                  user: user,
-                ))),
+                    child: Center(child: postScreen(name: user.companyName))),
                 Container(child: Center(child: createJobPostingScreen())),
                 Container(child: Center(child: companyChatScreen())),
                 Container(
@@ -221,8 +218,8 @@ class _navBarState extends State<navBar> {
                   elevation: 0,
                   selectedItemColor: AppColors.primarycolor2,
                   unselectedItemColor: Colors.white,
-                  showSelectedLabels: false,
-                  showUnselectedLabels: false,
+                  showSelectedLabels: true,
+                  showUnselectedLabels: true,
                   currentIndex: _selectedIndex,
                   onTap: _onItemTapped,
                   items: [
@@ -235,11 +232,11 @@ class _navBarState extends State<navBar> {
                       label: 'Add',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.message_outlined),
+                      icon: Icon(Icons.send),
                       label: 'Messages',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.person_outline),
+                      icon: Icon(Icons.person),
                       label: 'Profile',
                     ),
                   ],
@@ -280,16 +277,12 @@ class _navBarState extends State<navBar> {
                       icon: Icon(Icons.home),
                       label: 'Home',
                     ),
-                    // BottomNavigationBarItem(
-                    //   icon: Icon(Icons.add),
-                    //   label: 'Add',
-                    // ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.message_outlined),
+                      icon: Icon(Icons.send),
                       label: 'Messages',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.person_outline),
+                      icon: Icon(Icons.person),
                       label: 'Profile',
                     ),
                   ],
@@ -327,19 +320,19 @@ class _navBarState extends State<navBar> {
                 onTap: _onItemTapped,
                 items: [
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.home_outlined),
+                    icon: Icon(Icons.home),
                     label: 'Home',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.feed_outlined),
+                    icon: Icon(Icons.feed),
                     label: 'Posts',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.message_outlined),
+                    icon: Icon(Icons.send),
                     label: 'Messages',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.person_outline),
+                    icon: Icon(Icons.person),
                     label: 'Profile',
                   ),
                 ],

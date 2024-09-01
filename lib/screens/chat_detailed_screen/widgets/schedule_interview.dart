@@ -5,15 +5,19 @@ import 'package:intl/intl.dart';
 import 'package:jazzee/components/button.dart';
 import 'package:jazzee/main.dart';
 import 'package:jazzee/models/chats/message_model.dart';
+import 'package:jazzee/models/student/student_model.dart';
 
 import '../../../backend/jobdata/send_message.dart';
 import '../../../constants.dart/constants.dart';
 import '../../../core/theme/base_color.dart';
+import '../../../notification/send_notification.dart';
 
 class ScheduleInterviewDialog extends StatefulWidget {
-  const ScheduleInterviewDialog({Key? key, required this.message})
+  const ScheduleInterviewDialog(
+      {Key? key, required this.message, required this.student})
       : super(key: key);
   final Message message;
+  final Student student;
   @override
   _ScheduleInterviewDialogState createState() =>
       _ScheduleInterviewDialogState();
@@ -88,6 +92,13 @@ class _ScheduleInterviewDialogState extends State<ScheduleInterviewDialog> {
             Button(
                 onPressed: () async {
                   if (_selectedDate != null && _selectedTime != null) {
+                    await sendPushMessage(
+                        widget.student.token,
+                        widget.student.name,
+                        'Your Interview has been Scheduled for ' +
+                            DateFormat('yMMMd').format(_selectedDate!) +
+                            ' at ' +
+                            formatTimeOfDay(_selectedTime!));
                     await supabase.from('messages').insert({
                       'chat_id': widget.message.chatId,
                       'receiver_id': widget.message.student_id,

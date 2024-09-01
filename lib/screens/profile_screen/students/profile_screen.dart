@@ -1,8 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:jazzee/api/job_search_api.dart';
 import 'package:jazzee/core/theme/base_color.dart';
 import 'package:jazzee/core/theme/base_font';
+import 'package:jazzee/core/utils/shared_preference.dart';
 import 'package:jazzee/main.dart';
 import 'package:jazzee/models/student/student_model.dart';
 import 'package:jazzee/screens/applied_job_screen/applied_job_screen.dart';
@@ -23,6 +24,8 @@ class studentProfileScreen extends StatefulWidget {
 class _studentProfileScreenState extends State<studentProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final int analysis =
+        int.parse(SharedPreferencesService.getString('analysis') ?? '0');
     final List<Map<String, dynamic>> settings = [
       {
         'title': 'Personal Information',
@@ -81,13 +84,19 @@ class _studentProfileScreenState extends State<studentProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Profile Section
               SizedBox(height: MediaQuery.of(context).size.height * 0.05),
               Row(
                 children: [
                   CircleAvatar(
                     radius: 30,
-                    backgroundImage: AssetImage('assets/image/google_logo.png'),
+                    backgroundColor: Color(Random().nextInt(0xffffffff)),
+                    child: Text(
+                      widget.user.name[0],
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                   SizedBox(width: 16),
                   Column(
@@ -102,35 +111,47 @@ class _studentProfileScreenState extends State<studentProfileScreen> {
                         widget.user.collageName!,
                         style: TextStyle(color: Colors.grey),
                       ),
-                      Row(
-                        children: [
-                          Icon(Icons.location_on, color: Colors.grey, size: 16),
-                          SizedBox(width: 4),
-                          Text(
-                            'Aligadh',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     Icon(Icons.location_on, color: Colors.grey, size: 16),
+                      //     SizedBox(width: 4),
+                      //     Text(
+                      //       'Aligadh',
+                      //       style: TextStyle(color: Colors.grey),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
-                  Spacer(),
-                  InkWell(
-                    onTap: () async {
-                      jobSearchApi().search_Jobs(
-                          keywords: 'Golang', locationId: '92000000');
-                    },
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: AppColors.black,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(Icons.edit, color: Colors.white),
-                    ),
-                  )
                 ],
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Profile Completion (${((analysis / 6) * 100).toStringAsFixed(2)}%)',
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.green),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 2, vertical: 3),
+                height: 13,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.grey[400],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * (analysis / 6),
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: AppColors.primarycolor2,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                ),
               ),
               SizedBox(height: 40),
               Text(

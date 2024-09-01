@@ -2,123 +2,19 @@
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
-import 'package:jazzee/components/basic_text.dart';
-import 'package:jazzee/components/button.dart';
-import 'package:jazzee/components/text_field.dart';
 import 'package:jazzee/constants.dart/constants.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../core/theme/base_color.dart';
-import '../../main.dart';
 
-class videoCallScreen extends StatefulWidget {
-  const videoCallScreen({super.key});
+class workShop extends StatefulWidget {
+  const workShop({Key? key}) : super(key: key);
 
   @override
-  State<videoCallScreen> createState() => _videoCallScreenState();
+  State<workShop> createState() => _workShopState();
 }
 
-class _videoCallScreenState extends State<videoCallScreen> {
-  final _channelController = TextEditingController();
-  bool _validateError = false;
-  ClientRoleType _role = ClientRoleType.clientRoleBroadcaster;
-  @override
-  void dispose() {
-    _channelController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: AppColors.black,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            navigatorKey.currentState!.pop();
-          },
-        ),
-        title: basic_text(
-            title: 'Interview',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            )),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(height: 40),
-          Center(child: Image.network('https://tinyurl.com/2p889y4k')),
-          SizedBox(height: 20),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 10),
-          //   child: text_box(
-          //     value: _channelController,
-          //     title: '',
-          //     hint: 'Channel name',
-          //     validator: (value) {
-          //       if (value!.isEmpty) {
-          //         return 'Channel name is required';
-          //       }
-          //       return null;
-          //     },
-          //   ),
-          // ),
-          Text(
-            'Channel Name: $channel',
-            style: TextStyle(
-                color: AppColors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.w500),
-          ),
-          // RadioListTile(
-          //   title: Text('Broadcaster'),
-          //   value: ClientRoleType.clientRoleBroadcaster,
-          //   groupValue: _role,
-          //   onChanged: (value) {
-          //     setState(() {
-          //       _role = ClientRoleType.clientRoleBroadcaster;
-          //     });
-          //   },
-          // ),
-          SizedBox(height: 20),
-          Button(
-              onPressed: onJoin,
-              color: AppColors.black,
-              text: 'Join',
-              minimumSize: Size(MediaQuery.of(context).size.width * 0.7, 60)),
-        ],
-      ),
-    );
-  }
-
-  Future<void> onJoin() async {
-    setState(() {
-      _channelController.text.isEmpty
-          ? _validateError = true
-          : _validateError = false;
-    });
-
-    await [Permission.camera, Permission.microphone].request();
-    navigatorKey.currentState!.push(MaterialPageRoute(
-      builder: (context) => videoCall(),
-    ));
-  }
-}
-
-class videoCall extends StatefulWidget {
-  const videoCall({Key? key}) : super(key: key);
-
-  @override
-  State<videoCall> createState() => _videoCallState();
-}
-
-class _videoCallState extends State<videoCall> {
-  int? _remoteUid;
+class _workShopState extends State<workShop> {
+  List<int> _remoteUids = [];
   bool _localUserJoined = false;
   late RtcEngine _engine;
   bool _muted = false;
@@ -148,14 +44,14 @@ class _videoCallState extends State<videoCall> {
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
           debugPrint("remote user $remoteUid joined");
           setState(() {
-            _remoteUid = remoteUid;
+            _remoteUids.add(remoteUid);
           });
         },
         onUserOffline: (RtcConnection connection, int remoteUid,
             UserOfflineReasonType reason) {
           debugPrint("remote user $remoteUid left channel");
           setState(() {
-            _remoteUid = null;
+            _remoteUids.remove(remoteUid);
           });
         },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
@@ -175,6 +71,33 @@ class _videoCallState extends State<videoCall> {
       uid: 0,
       options: const ChannelMediaOptions(),
     );
+  }
+
+  Widget _remoteVideo() {
+    if (_remoteUids.isNotEmpty) {
+      return GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: _remoteUids.length <= 2 ? 1 : 2,
+          childAspectRatio: 1.0,
+        ),
+        itemCount: _remoteUids.length,
+        itemBuilder: (BuildContext context, int index) {
+          return AgoraVideoView(
+            controller: VideoViewController.remote(
+              rtcEngine: _engine,
+              canvas: VideoCanvas(uid: _remoteUids[index]),
+              connection: const RtcConnection(channelId: channel),
+            ),
+          );
+        },
+      );
+    } else {
+      return const Text(
+        'Please wait for users to join',
+        textAlign: TextAlign.center,
+        style: TextStyle(color: Colors.white),
+      );
+    }
   }
 
   @override
@@ -220,8 +143,7 @@ class _videoCallState extends State<videoCall> {
               child: Center(
                 child: _localUserJoined
                     ? AgoraVideoView(
-                        controller: VideoViewController.remote(
-                          connection: const RtcConnection(channelId: channel),
+                        controller: VideoViewController(
                           rtcEngine: _engine,
                           canvas: const VideoCanvas(uid: 0),
                         ),
@@ -277,25 +199,6 @@ class _videoCallState extends State<videoCall> {
         ],
       ),
     );
-  }
-
-  // Display remote user's video
-  Widget _remoteVideo() {
-    if (_remoteUid != null) {
-      return AgoraVideoView(
-        controller: VideoViewController.remote(
-          rtcEngine: _engine,
-          canvas: VideoCanvas(uid: _remoteUid),
-          connection: const RtcConnection(channelId: channel),
-        ),
-      );
-    } else {
-      return const Text(
-        'Please wait for user to join',
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.white),
-      );
-    }
   }
 }
 
