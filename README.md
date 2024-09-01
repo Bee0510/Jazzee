@@ -1,4 +1,4 @@
-![Screenshot_1725148321](https://github.com/user-attachments/assets/b0b9760a-d279-4418-a64a-6a186bf2abc5)# Jazzee
+# Jazzee
 
 Welcome to **Jazzee** - an innovative platform designed to connect students, companies, and colleges. Jazzee serves as an academic and career-oriented networking hub, similar to LinkedIn, but with a focus on empowering students and fostering collaborations between educational institutions and industry professionals.
 
@@ -52,7 +52,8 @@ Below are screenshots demonstrating the different roles and their functionalitie
 ### Company Role
 ![Company Dashboard](path_to_company_dashboard_image)
 ![Job Posting](path_to_job_posting_image)
-![Candidate Search](![Screenshot_1725148289](https://github.com/user-attachments/assets/08b30756-6052-4179-b80e-a27a63d1fe94)
+![Candidate Search](<img src="![Screenshot_1725148289](https://github.com/user-attachments/assets/08b30756-6052-4179-b80e-a27a63d1fe94)" alt="Description" width="400" height="300"/>
+
 ![Screenshot_1725148244](https://github.com/user-attachments/assets/1c1a5412-a9ab-4766-8e2d-dc04b2275ed7)
 ![Screenshot_1725148697](https://github.com/user-attachments/assets/f1dc8371-f9c8-4618-879b-35929a70bd3c)
 ![Screenshot_1725148681](https://github.com/user-attachments/assets/fd3e84c4-2d87-45d2-97c6-b66c03a32394)
