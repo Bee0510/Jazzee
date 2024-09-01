@@ -45,28 +45,25 @@ Share your achievements, updates, and thoughts with your network. Engage with po
 Below are screenshots demonstrating the different roles and their functionalities within the Jazzee app:
 
 ### Student Role
-![Student Dashboard](path_to_student_dashboard_image)
-![Job Search](path_to_job_search_image)
-![Social Feed](path_to_social_feed_image)
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+  <img src="https://github.com/user-attachments/assets/08b30756-6052-4179-b80e-a27a63d1fe94" alt="Student Dashboard" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/1c1a5412-a9ab-4766-8e2d-dc04b2275ed7" alt="Job Search" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/f1dc8371-f9c8-4618-879b-35929a70bd3c" alt="Social Feed" width="30%"/>
+</div>
 
 ### Company Role
-![Company Dashboard](path_to_company_dashboard_image)
-![Job Posting](path_to_job_posting_image)
-![Candidate Search](<img src="![Screenshot_1725148289](https://github.com/user-attachments/assets/08b30756-6052-4179-b80e-a27a63d1fe94)" alt="Description" width="400" height="300"/>
-
-![Screenshot_1725148244](https://github.com/user-attachments/assets/1c1a5412-a9ab-4766-8e2d-dc04b2275ed7)
-![Screenshot_1725148697](https://github.com/user-attachments/assets/f1dc8371-f9c8-4618-879b-35929a70bd3c)
-![Screenshot_1725148681](https://github.com/user-attachments/assets/fd3e84c4-2d87-45d2-97c6-b66c03a32394)
-![Screenshot_1725148667](https://github.com/user-attachments/assets/9166c84b-1c7f-4a8d-8b5f-c9ecc92a707d)
-![Screenshot_1725148642](https://github.com/user-attachments/assets/8a110b6c-3d79-4c02-9916-3f024abaeacf)
-![Screenshot_1725148607](https://github.com/user-attachments/assets/0a57b3b0-b51d-4f40-b1d5-6ead3a84ba5d)
-![Screenshot_1725148454](https://github.com/user-attachments/assets/c019629a-4375-4b79-a489-499f47de2921))
-
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+  <img src="https://github.com/user-attachments/assets/fd3e84c4-2d87-45d2-97c6-b66c03a32394" alt="Company Dashboard" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/9166c84b-1c7f-4a8d-8b5f-c9ecc92a707d" alt="Job Posting" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/8a110b6c-3d79-4c02-9916-3f024abaeacf" alt="Candidate Search" width="30%"/>
+</div>
 
 ### College Role
-![College Dashboard](path_to_college_dashboard_image)
-![Event Management](path_to_event_management_image)
-![Alumni Network](path_to_alumni_network_image)
+<div style="display: flex; flex-wrap; justify-content: space-between;">
+  <img src="https://github.com/user-attachments/assets/0a57b3b0-b51d-4f40-b1d5-6ead3a84ba5d" alt="College Dashboard" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/c019629a-4375-4b79-a489-499f47de2921" alt="Event Management" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/08b30756-6052-4179-b80e-a27a63d1fe94" alt="Alumni Network" width="30%"/>
+</div>
 
 ## Getting Started
 
