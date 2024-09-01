@@ -1,6 +1,7 @@
 # Jazzee
 
 Welcome to **Jazzee** - an innovative platform designed to connect students, companies, and colleges. Jazzee serves as an academic and career-oriented networking hub, similar to LinkedIn, but with a focus on empowering students and fostering collaborations between educational institutions and industry professionals.
+[Demo Video Link](https://www.youtube.com/watch?v=PPTzDDIBXuc)
 
 ## Key Features
 
