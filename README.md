@@ -58,7 +58,7 @@ Below are screenshots demonstrating the different roles and their functionalitie
 </div>
 
 
-### Company Role![
+### Company Role
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
   <img src="https://github.com/user-attachments/assets/2a176830-aa87-4b2c-8909-916686b45323" alt="Screenshot 1" width="30%"/>
   <img src="https://github.com/user-attachments/assets/909660e7-884a-4a39-bf9b-c4464af67b63" alt="Screenshot 2" width="30%"/>
