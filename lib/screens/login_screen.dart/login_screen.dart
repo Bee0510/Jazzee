@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:jazzee/backend/auth/login.dart';
 import 'package:jazzee/components/text_field.dart';
 import 'package:jazzee/constants.dart/constants.dart';
@@ -10,9 +9,8 @@ import 'package:jazzee/core/theme/base_font';
 import 'package:jazzee/core/utils/shared_preference.dart';
 import 'package:jazzee/main.dart';
 import 'package:jazzee/navbar.dart';
-import 'package:jazzee/notification/send_notification.dart';
-
 import '../../components/button.dart';
+import '../../notification/send_notification.dart';
 import '../register_screen/register_screen.dart';
 
 class loginScreen extends StatefulWidget {
@@ -23,6 +21,7 @@ class loginScreen extends StatefulWidget {
 class _loginScreenState extends State<loginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
   String _roleType = 'students';
   @override
   Widget build(BuildContext context) {
@@ -116,6 +115,9 @@ class _loginScreenState extends State<loginScreen> {
                 width: double.infinity,
                 child: Button(
                     onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
                       await Login().signIn(
                         emailController.text,
                         passwordController.text,
@@ -125,20 +127,59 @@ class _loginScreenState extends State<loginScreen> {
                         await SharedPreferencesService.setString(
                             'role', _roleType);
                         if (_roleType == 'students') {
-                          await supabase.from('students').update({
-                            'token':
-                                SharedPreferencesService.getString('token'),
-                          }).eq('student_id', supabase.auth.currentUser!.id);
+                          await supabase
+                              .from('students')
+                              .update({
+                                'token':
+                                    SharedPreferencesService.getString('token'),
+                              })
+                              .eq('student_id', supabase.auth.currentUser!.id)
+                              .then((value) async {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                await sendPushMessage(
+                                    SharedPreferencesService.getString(
+                                        'token')!,
+                                    'Logged In Successfully',
+                                    'Welcome ${supabase.auth.currentUser!.email}');
+                              });
                         } else if (_roleType == 'recruiter') {
-                          await supabase.from('recruiter').update({
-                            'token':
-                                SharedPreferencesService.getString('token'),
-                          }).eq('company_id', supabase.auth.currentUser!.id);
+                          setState(() {
+                            isLoading = false;
+                          });
+                          await supabase
+                              .from('recruiter')
+                              .update({
+                                'token':
+                                    SharedPreferencesService.getString('token'),
+                              })
+                              .eq('company_id', supabase.auth.currentUser!.id)
+                              .then((value) async {
+                                await sendPushMessage(
+                                    SharedPreferencesService.getString(
+                                        'token')!,
+                                    'Logged In Successfully',
+                                    'Welcome ${supabase.auth.currentUser!.email}');
+                              });
                         } else {
-                          await supabase.from('collage').update({
-                            'token':
-                                SharedPreferencesService.getString('token'),
-                          }).eq('collage_id', supabase.auth.currentUser!.id);
+                          await supabase
+                              .from('collage')
+                              .update({
+                                'token':
+                                    SharedPreferencesService.getString('token'),
+                              })
+                              .eq('collage_id', supabase.auth.currentUser!.id)
+                              .then((value) async {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                await sendPushMessage(
+                                    SharedPreferencesService.getString(
+                                        'token')!,
+                                    'Logged In Successfully',
+                                    'Welcome ${supabase.auth.currentUser!.email}');
+                              });
                         }
                         navigatorKey.currentState!.push(
                           MaterialPageRoute(
@@ -148,7 +189,7 @@ class _loginScreenState extends State<loginScreen> {
                       }
                     },
                     color: AppColors.black,
-                    text: 'Log in',
+                    text: isLoading ? 'Loading...' : 'Log in',
                     minimumSize:
                         Size(MediaQuery.of(context).size.width * 0.7, 50)),
               ),

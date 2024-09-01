@@ -8,6 +8,7 @@ import 'package:jazzee/components/button.dart';
 import 'package:jazzee/components/text_field.dart';
 import 'package:jazzee/constants.dart/constants.dart';
 import 'package:jazzee/main.dart';
+import 'package:jazzee/notification/send_notification.dart';
 import 'package:jazzee/screens/create_job_posting_screen/widgets/date_picker.dart';
 import 'package:jazzee/screens/create_job_posting_screen/widgets/skill_picker.dart';
 import 'package:jazzee/screens/wrapper.dart';
@@ -361,7 +362,11 @@ class _createJobPostingScreenState extends State<createJobPostingScreen> {
                                       _selectedJobLocation!,
                                       recruiter.companyName,
                                       selectedStartDate!)
-                                  .then((value) {
+                                  .then((value) async {
+                                await sendPushMessage(
+                                    recruiter.token,
+                                    'Job Creation Successful',
+                                    'Your Job Posting has been created successfully');
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                   backgroundColor: Colors.green,

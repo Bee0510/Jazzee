@@ -37,7 +37,7 @@ class _ResumeUploaderState extends State<ResumeUploader> {
         _fileUrl = fileUrl;
       });
       // Download the file to a local path to display in PDF viewer
-      _localPath = await _downloadPDF();
+      _localPath = await _downloadPdf();
       if (_localPath != null) {
         setState(() {
           _localPath = _localPath;
@@ -60,7 +60,7 @@ class _ResumeUploaderState extends State<ResumeUploader> {
 
   String? localFilePath;
 
-  Future<void> _downloadPdf() async {
+  Future<String> _downloadPdf() async {
     try {
       final responses = await Supabase.instance.client
           .from('students')
@@ -83,8 +83,10 @@ class _ResumeUploaderState extends State<ResumeUploader> {
           localFilePath = file.path;
         });
       }
+      return localFilePath!;
     } catch (e) {
       print("Error: $e");
+      return '';
     }
   }
 
@@ -169,8 +171,9 @@ class _ResumeUploaderState extends State<ResumeUploader> {
                             filePath: localFilePath!,
                           ))
                         : Center(
-                            child: CircularProgressIndicator(
-                              color: AppColors.primarycolor2,
+                            child: Text(
+                              'No resume uploaded yet.',
+                              style: TextStyle(color: AppColors.primarycolor2),
                             ),
                           ),
                     SizedBox(height: 20),

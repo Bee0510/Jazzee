@@ -125,6 +125,7 @@ class _videoCallState extends State<videoCall> {
 
   @override
   void initState() {
+    _remoteUid = 0;
     super.initState();
     initAgora();
   }

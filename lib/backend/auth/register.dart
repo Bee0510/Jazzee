@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jazzee/core/utils/shared_preference.dart';
 import 'package:jazzee/main.dart';
+import 'package:jazzee/notification/send_notification.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../screens/login_screen.dart/login_screen.dart';
@@ -73,6 +75,10 @@ class Register {
           'collage_name': collage_name,
           'college_id': collage_id,
           'roll_no': roll_no,
+          'token': SharedPreferencesService.getString('token')
+        }).then((value) async {
+          await sendPushMessage(SharedPreferencesService.getString('token')!,
+              'Registeration Successful', 'Welcome ${name}');
         });
       } else if (roleType == 'recruiter') {
         await supabase.from('recruiter').insert({
@@ -81,6 +87,10 @@ class Register {
           'company_telephone': phone_no,
           'company_email': email,
           'gst': gst,
+          'token': SharedPreferencesService.getString('token')
+        }).then((value) async {
+          await sendPushMessage(SharedPreferencesService.getString('token')!,
+              'Registeration Successful', 'Welcome ${name}');
         });
       } else if (roleType == 'collage') {
         await supabase.from('collage').insert({
@@ -89,6 +99,10 @@ class Register {
           'collage_mail': email,
           'collage_no': phone_no,
           'collage_code': collage_code,
+          'token': SharedPreferencesService.getString('token')
+        }).then((value) async {
+          await sendPushMessage(SharedPreferencesService.getString('token')!,
+              'Registeration Successful', 'Welcome ${name}');
         });
       } else {
         throw Exception("Invalid role type");

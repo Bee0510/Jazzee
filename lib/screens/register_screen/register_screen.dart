@@ -8,9 +8,6 @@ import 'package:jazzee/components/text_field.dart';
 import 'package:jazzee/core/theme/base_color.dart';
 import 'package:jazzee/core/theme/base_font';
 import 'package:jazzee/main.dart';
-import 'package:jazzee/navbar.dart';
-
-import '../../../../constants.dart/constants.dart';
 
 class registerScreen extends StatefulWidget {
   @override
@@ -31,7 +28,7 @@ class _registerScreenState extends State<registerScreen> {
   String _selectedCollageId = '';
   late Future<List<Map<String, dynamic>>> collages;
   late Future<List<City>?> cities;
-
+  bool isloading = false;
   List<Map<String, dynamic>> filteredCollages = [];
   TextEditingController searchController = TextEditingController();
 
@@ -251,20 +248,6 @@ class _registerScreenState extends State<registerScreen> {
                                       }).toList(),
                                     ),
                                   ),
-                                  SizedBox(height: 20),
-                                  text_box(
-                                    value: collageRollController,
-                                    title: 'Password',
-                                    height: MediaQuery.of(context).size.height *
-                                        0.07,
-                                    hint: 'College Roll Number',
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter valid roll number';
-                                      }
-                                      return null;
-                                    },
-                                  ),
                                   const SizedBox(height: 20),
                                   text_box(
                                     value: collageRollController,
@@ -318,6 +301,9 @@ class _registerScreenState extends State<registerScreen> {
                           child: ElevatedButton(
                             onPressed: () async {
                               if (_formkey.currentState!.validate()) {
+                                setState(() {
+                                  isloading = true;
+                                });
                                 await Register()
                                     .register(
                                   email: emailController.text,
@@ -332,6 +318,9 @@ class _registerScreenState extends State<registerScreen> {
                                   gst: _GSTINController.text,
                                 )
                                     .then((value) {
+                                  setState(() {
+                                    isloading = false;
+                                  });
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
@@ -358,7 +347,7 @@ class _registerScreenState extends State<registerScreen> {
                               ),
                             ),
                             child: Text(
-                              'Register',
+                              isloading ? 'Loading...' : 'Register',
                               style: AppTextStyles.mediumRegular.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500),

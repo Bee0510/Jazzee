@@ -321,29 +321,29 @@ class _jobApplicantsScreenState extends State<jobApplicantsScreen> {
                                                             jobApplied
                                                                 .companyName,
                                                             'Dear ${filteredStudents[index].name},\nYour application has been accepted. Please keep an eye on your email for further instructions.');
-                                                        await supabase
-                                                            .from('chats')
-                                                            .insert({
-                                                          'company_id':
-                                                              jobApplied
-                                                                  .companyId,
-                                                          'student_id':
-                                                              jobApplied
-                                                                  .student_id,
-                                                          'sender_id':
-                                                              jobApplied
-                                                                  .companyId,
-                                                          'receiver_id':
-                                                              jobApplied
-                                                                  .student_id,
-                                                          'last_message':
-                                                              'Dear ${filteredStudents[index].name},\nCongratulations! You have been selected for the interview. Please let us know your availability for the interview.',
-                                                          'last_time': DateTime
-                                                                  .now()
-                                                              .toIso8601String(),
-                                                          'first_message':
-                                                              'Dear ${filteredStudents[index].name},\nCongratulations! You have been selected for the interview. Please let us know your availability for the interview.',
-                                                        });
+                                                        // await supabase
+                                                        //     .from('chats')
+                                                        //     .update({
+                                                        //   'company_id':
+                                                        //       jobApplied
+                                                        //           .companyId,
+                                                        //   'student_id':
+                                                        //       jobApplied
+                                                        //           .student_id,
+                                                        //   'sender_id':
+                                                        //       jobApplied
+                                                        //           .companyId,
+                                                        //   'receiver_id':
+                                                        //       jobApplied
+                                                        //           .student_id,
+                                                        //   'last_message':
+                                                        //       'Dear ${filteredStudents[index].name},\nCongratulations! You have been selected for the interview. Please let us know your availability for the interview.',
+                                                        //   'last_time': DateTime
+                                                        //           .now()
+                                                        //       .toIso8601String(),
+                                                        //   'first_message':
+                                                        //       'Dear ${filteredStudents[index].name},\nCongratulations! You have been selected for the interview. Please let us know your availability for the interview.',
+                                                        // });
                                                       });
                                                 },
                                                 child: Text('Accept',

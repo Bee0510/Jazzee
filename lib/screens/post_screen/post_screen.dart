@@ -178,21 +178,33 @@ class _SocialMediaPostPageState extends State<SocialMediaPostPage> {
             (event) => event.map(Post.fromMap).toList()),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return Container(
+                height: double.infinity,
+                child: Center(child: CircularProgressIndicator()));
           } else {
             List<Post> posts = snapshot.data;
-            return ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              physics: BouncingScrollPhysics(),
-              itemCount: posts.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: PostWidget(post: posts[index]),
-                );
-              },
-            );
+            return posts.isEmpty
+                ? Center(
+                    child: Text(
+                      'No Post Yet',
+                      style: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    physics: BouncingScrollPhysics(),
+                    itemCount: posts.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: PostWidget(post: posts[index]),
+                      );
+                    },
+                  );
           }
         });
   }
@@ -283,7 +295,7 @@ class _PostWidgetState extends State<PostWidget> {
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
                               image: NetworkImage(imageUrls[index]),
-                              fit: BoxFit.cover,
+                              fit: BoxFit.fill,
                             ),
                           ),
                           width: MediaQuery.of(context).size.width * 0.4,

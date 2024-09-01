@@ -96,7 +96,7 @@ class _CompanyJobDetailsScreenState extends State<CompanyJobDetailsScreen> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              Icon(Icons.attach_money,
+                              Icon(Icons.monetization_on,
                                   color: Colors.grey, size: 16),
                               SizedBox(width: 4),
                               Text('₹ ${widget.job.salary}/Year',
