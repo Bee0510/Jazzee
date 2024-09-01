@@ -49,20 +49,22 @@ Below are screenshots demonstrating the different roles and their functionalitie
   <img src="https://github.com/user-attachments/assets/08b30756-6052-4179-b80e-a27a63d1fe94" alt="Student Dashboard" width="30%"/>
   <img src="https://github.com/user-attachments/assets/1c1a5412-a9ab-4766-8e2d-dc04b2275ed7" alt="Job Search" width="30%"/>
   <img src="https://github.com/user-attachments/assets/f1dc8371-f9c8-4618-879b-35929a70bd3c" alt="Social Feed" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/fd3e84c4-2d87-45d2-97c6-b66c03a32394" alt="Company Dashboard" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/9166c84b-1c7f-4a8d-8b5f-c9ecc92a707d" alt="Job Posting" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/8a110b6c-3d79-4c02-9916-3f024abaeacf" alt="Candidate Search" width="30%"/>
+   <img src="https://github.com/user-attachments/assets/0a57b3b0-b51d-4f40-b1d5-6ead3a84ba5d" alt="College Dashboard" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/c019629a-4375-4b79-a489-499f47de2921" alt="Event Management" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/08b30756-6052-4179-b80e-a27a63d1fe94" alt="Alumni Network" width="30%"/>
 </div>
 
 ### Company Role
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-  <img src="https://github.com/user-attachments/assets/fd3e84c4-2d87-45d2-97c6-b66c03a32394" alt="Company Dashboard" width="30%"/>
-  <img src="https://github.com/user-attachments/assets/9166c84b-1c7f-4a8d-8b5f-c9ecc92a707d" alt="Job Posting" width="30%"/>
-  <img src="https://github.com/user-attachments/assets/8a110b6c-3d79-4c02-9916-3f024abaeacf" alt="Candidate Search" width="30%"/>
+  
 </div>
 
 ### College Role
 <div style="display: flex; flex-wrap; justify-content: space-between;">
-  <img src="https://github.com/user-attachments/assets/0a57b3b0-b51d-4f40-b1d5-6ead3a84ba5d" alt="College Dashboard" width="30%"/>
-  <img src="https://github.com/user-attachments/assets/c019629a-4375-4b79-a489-499f47de2921" alt="Event Management" width="30%"/>
-  <img src="https://github.com/user-attachments/assets/08b30756-6052-4179-b80e-a27a63d1fe94" alt="Alumni Network" width="30%"/>
+ 
 </div>
 
 ## Getting Started
