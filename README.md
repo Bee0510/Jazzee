@@ -79,7 +79,8 @@ Below are screenshots demonstrating the different roles and their functionalitie
 
 ### College Role
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-  
+  <img src="https://github.com/user-attachments/assets/4299ba22-962b-4f80-bb48-f389befa7535" alt="Screenshot 7" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/42eeb080-163c-44e2-803c-5a5647dc4a95" alt="Screenshot 8" width="30%"/>
 </div>
 
 ## Getting Started
