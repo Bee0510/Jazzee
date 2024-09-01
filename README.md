@@ -57,12 +57,8 @@ Below are screenshots demonstrating the different roles and their functionalitie
   <img src="https://github.com/user-attachments/assets/08b30756-6052-4179-b80e-a27a63d1fe94" alt="Alumni Network" width="30%"/>
 </div>
 
-### Company Role
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-  
-</div>
 
-### College Role![Screenshot_1725149212](https://github.com/user-attachments/assets/e5ce87bb-47e8-4fc0-be7d-cdddcac57154)
+### Company Role![
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
   <img src="https://github.com/user-attachments/assets/2a176830-aa87-4b2c-8909-916686b45323" alt="Screenshot 1" width="30%"/>
   <img src="https://github.com/user-attachments/assets/909660e7-884a-4a39-bf9b-c4464af67b63" alt="Screenshot 2" width="30%"/>
@@ -78,11 +74,12 @@ Below are screenshots demonstrating the different roles and their functionalitie
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
   <img src="https://github.com/user-attachments/assets/645947c3-f817-487a-954a-1f24661f6133" alt="Screenshot 7" width="30%"/>
   <img src="https://github.com/user-attachments/assets/a7c93969-2dc4-46c6-8231-5130a7fd1aa7" alt="Screenshot 8" width="30%"/>
+   <img src="https://github.com/user-attachments/assets/e5ce87bb-47e8-4fc0-be7d-cdddcac57154" alt="Screenshot 1" width="30%"/>
 </div>
 
-
-<div style="display: flex; flex-wrap; justify-content: space-between;">
- 
+### College Role
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+  
 </div>
 
 ## Getting Started
