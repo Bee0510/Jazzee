@@ -67,12 +67,12 @@ Below are screenshots demonstrating the different roles and their functionalitie
 
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
   <img src="https://github.com/user-attachments/assets/516b53c9-4ad4-4e10-8e10-a4d9f485b9ca" alt="Screenshot 4" width="30%"/>
-  <img src="https://github.com/user-attachments/assets/f32dac6e-93ec-47dc-8a92-7731948a63b3" alt="Screenshot 5" width="30%"/>
+ <img src="https://github.com/user-attachments/assets/f32dac6e-93ec-47dc-8a92-7731948a63b3" alt="Screenshot 5" width="30%"/>
   <img src="https://github.com/user-attachments/assets/aa60fef1-d6d8-4315-b443-73249c94a539" alt="Screenshot 6" width="30%"/>
 </div>
 
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-  <img src="https://github.com/user-attachments/assets/645947c3-f817-487a-954a-1f24661f6133" alt="Screenshot 7" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/5658c122-0ba4-4501-8f42-18fb151b60a5" alt="Screenshot 7" width="30%"/>
   <img src="https://github.com/user-attachments/assets/a7c93969-2dc4-46c6-8231-5130a7fd1aa7" alt="Screenshot 8" width="30%"/>
    <img src="https://github.com/user-attachments/assets/e5ce87bb-47e8-4fc0-be7d-cdddcac57154" alt="Screenshot 1" width="30%"/>
 </div>
@@ -81,6 +81,7 @@ Below are screenshots demonstrating the different roles and their functionalitie
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
   <img src="https://github.com/user-attachments/assets/4299ba22-962b-4f80-bb48-f389befa7535" alt="Screenshot 7" width="30%"/>
   <img src="https://github.com/user-attachments/assets/42eeb080-163c-44e2-803c-5a5647dc4a95" alt="Screenshot 8" width="30%"/>
+  <img src="https://github.com/user-attachments/assets/645947c3-f817-487a-954a-1f24661f6133" alt="Screenshot 7" width="30%"/>
 </div>
 
 ## Getting Started
