@@ -3,6 +3,14 @@
 Welcome to **Jazzee** - an innovative platform designed to connect students, companies, and colleges. Jazzee serves as an academic and career-oriented networking hub, similar to LinkedIn, but with a focus on empowering students and fostering collaborations between educational institutions and industry professionals.
 [Demo Video Link](https://www.youtube.com/watch?v=PPTzDDIBXuc)
 
+## Assumptions
+1. We assume that job seekers will optimize their profiles, ensuring they are fully completed with all necessary details (e.g., skills, experience, education) to increase their chances of being noticed by recruiters.
+2. We assume that candidates will apply to each job posting only once, and there is no opportunity for candidates to edit or resubmit their applications after submission.
+3. We assume that the app’s job search and recommendation algorithm is primarily based on matching a candidate's skills with the job requirements, assuming all other factors (e.g., location, company size) are secondary.
+4. We assume that once a job offer is made, there is no room for salary or benefits negotiation. Candidates either accept or reject the offer based on the initial terms.
+5. We assume that job postings remain active for a fixed period (e.g., 30 days), with no option for early closure or extension by the recruiter.
+
+
 ## Key Features
 
 ### 🔔 Instant Notifications
